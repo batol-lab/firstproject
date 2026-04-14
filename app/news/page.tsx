@@ -6,18 +6,17 @@ import { useNewa } from "./_hooks/news.hooks";
 import { ArticleType } from "./_types/news.types";
 import NewsComponents from "./_components/NewsComponents";
 import { ThreeDots } from "react-loader-spinner";
- 
-const NewsPage = () => {
 
-const [page ,setPage]=useState(1);
+const NewsPage = () => {
+  const [page, setPage] = useState(1);
 
   const { data, isLoading, isError, error } = useNewa(page);
 
- const changePage = () => {
-   if (page < 10) {
-     setPage((prev) => prev + 1);
-   }
- };
+  const changePage = () => {
+    if (page < 10) {
+      setPage((prev) => prev + 1);
+    }
+  };
 
   return (
     <div className="w-full px-6 py-6">
@@ -43,28 +42,55 @@ const [page ,setPage]=useState(1);
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 cursor-pointer overflow-hidden flex flex-col"
+                  onClick={() => window.open(element.url, "_blank")}
+                  className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
                 >
-                  {/* صورة */}
+                  {/* Background Image */}
                   <img
-                    src={element.urlToImage}
+                    src={element.urlToImage || "/fallback.jpg"}
                     alt={element.title}
-                    className="h-48 w-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
 
-                  {/* المحتوى */}
-                  <div className="p-4 flex flex-col gap-2 flex-grow">
-                    <h2 className="font-semibold text-lg line-clamp-2">
-                      {element.title}
-                    </h2>
+                  {/* Dark overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
 
-                    <p className="text-sm text-gray-500 line-clamp-3">
-                      {element.description}
-                    </p>
+                  {/* Content container */}
+                  <div className="relative h-full flex flex-col justify-end p-5">
+                    {/* Floating glass panel */}
+                    <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-4 flex flex-col gap-3 shadow-lg">
+                      {/* Source + Date */}
+                      <div className="flex justify-between items-center text-xs text-gray-200">
+                        <span className="font-medium tracking-wide">
+                          {element.source?.name}
+                        </span>
+                        <span>
+                          {new Date(element.publishedAt).toLocaleDateString()}
+                        </span>
+                      </div>
 
-                    <p className="text-xs text-gray-400 mt-auto">
-                      {element.author}
-                    </p>
+                      {/* Title */}
+                      <h2 className="text-white text-lg font-semibold leading-snug line-clamp-2 group-hover:text-blue-300 transition">
+                        {element.title}
+                      </h2>
+
+                      {/* Description */}
+                      <p className="text-sm text-gray-300 line-clamp-3">
+                        {element.description}
+                      </p>
+
+                      {/* Footer */}
+                      <div className="flex items-center justify-between pt-2 border-t border-white/20">
+                        <span className="text-xs text-gray-300">
+                          {element.author || "Unknown author"}
+                        </span>
+
+                        {/* Read more indicator */}
+                        <span className="text-xs text-blue-300 group-hover:translate-x-1 transition">
+                          Read →
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
@@ -72,12 +98,18 @@ const [page ,setPage]=useState(1);
         </div>
       )}
       <div className="flex gap-4 justify-center m-4">
-        <p className="rounded-full  bg-amber-950 w-10 text-center text-amber-500">{page}</p>
-        <button onClick={changePage} className="rounded-lg text-amber-500 bg-amber-950 w-30 hover:text-blue-50 hover:bg-amber-500 ">Nest</button>
+        <p className="rounded-full  bg-amber-950 w-10 text-center text-amber-500">
+          {page}
+        </p>
+        <button
+          onClick={changePage}
+          className="rounded-lg text-amber-500 bg-amber-950 w-30 hover:text-blue-50 hover:bg-amber-500 "
+        >
+          Nest
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default NewsPage;
- 
