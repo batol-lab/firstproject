@@ -1,4 +1,4 @@
- export interface ResponceArticles {
+export interface ResponceArticles {
   status: string;
   totalResults: number;
   articles: ArticleType[];
@@ -9,4 +9,9 @@ export interface ArticleType {
   description: string;
   content: string;
   urlToImage: string;
+  url: string;
+  publishedAt: string;
+  source: {
+    name: string;
+  };
 }
