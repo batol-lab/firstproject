@@ -6,11 +6,13 @@ import { useNewa } from "./_hooks/news.hooks";
 import { ArticleType } from "./_types/news.types";
 import NewsComponents from "./_components/NewsComponents";
 import { ThreeDots } from "react-loader-spinner";
+import Navbar from "./_components/Navbar";
 
 const NewsPage = () => {
+   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError, error } = useNewa(page);
+  const { data, isLoading, isError, error } = useNewa(search,page);
 
   const changePage = () => {
     if (page < 10) {
@@ -20,6 +22,7 @@ const NewsPage = () => {
 
   return (
     <div className="w-full px-6 py-6">
+      <Navbar search={search} setSearch={setSearch} />
       {isLoading ? (
         <div className="text-center text-lg font-semibold flex justify-center items-center h-screen">
           <ThreeDots
@@ -38,7 +41,7 @@ const NewsPage = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {data &&
-            data.articles.map((element: ArticleType, index: number) => {
+            data?.articles?.map((element: ArticleType, index: number) => {
               return (
                 <div
                   key={index}
@@ -97,6 +100,7 @@ const NewsPage = () => {
             })}
         </div>
       )}
+
       <div className="flex gap-4 justify-center m-4">
         <p className="rounded-full  bg-amber-950 w-10 text-center text-amber-500">
           {page}

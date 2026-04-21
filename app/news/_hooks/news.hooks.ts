@@ -3,9 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getData } from "../_services/news.services";
 
-export function useNewa(page:number) {
+export function useNewa(search:string,page:number) {
     return useQuery({
-      queryKey: ["articles",page],
-      queryFn: () => getData(page),
+      queryKey: ["articles",search,page],
+      queryFn: () => getData(search,page),
     });
 }
